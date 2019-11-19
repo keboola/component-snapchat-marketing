@@ -1,1 +1,106 @@
-{}
+{
+    "title": "Parameters",
+    "type": "object",
+    "required": [
+        "statisticsObjects",
+        "dateSettings",
+        "attributionSettings",
+        "query"
+    ],
+    "properties": {
+        "statisticsObjects": {
+            "title": "Objects to download",
+            "description": "A list of objects, which will be downloaded.",
+            "type": "array",
+            "format": "table",
+            "uniqueItems": true,
+            "items": {
+                "enum": [
+                    "campaigns",
+                    "adsquads",
+                    "ads"
+                ],
+                "type": "string"
+            },
+            "default": [
+                "campaigns",
+                "adsquads",
+                "ads"
+            ],
+            "propertyOrder": 100
+        },
+        "dateSettings": {
+            "type": "object",
+            "title": "Date settings",
+            "format": "grid",
+            "required": [
+                "startDate",
+                "endDate"
+            ],
+            "properties": {
+                "startDate": {
+                    "type": "string",
+                    "title": "Start Date",
+                    "default": "30 days ago",
+                    "propertyOrder": 100
+                },
+                "endDate": {
+                    "type": "string",
+                    "title": "End Date",
+                    "default": "today",
+                    "propertyOrder": 200
+                }
+            },
+            "propertyOrder": 200
+        },
+        "attributionSettings": {
+            "type": "object",
+            "title": "Result settings",
+            "format": "grid",
+            "required": [
+                "windowSwipe",
+                "windowView",
+                "granularity"
+            ],
+            "propertyOrder": 300,
+            "properties": {
+                "windowSwipe": {
+                    "type": "string",
+                    "title": "View Window Attribution",
+                    "enum": ["1_HOUR", "3_HOUR", "6_HOUR", "1_DAY", "7_DAY", "28_DAY"],
+                    "default": "1_DAY",
+                    "propertyOrder": 100
+                },
+                "windowView": {
+                    "type": "string",
+                    "title": "Swipe Up Window Attribution",
+                    "enum": ["1_DAY", "7_DAY", "28_DAY"],
+                    "default": "28_DAY",
+                    "propertyOrder": 200
+                },
+                "granularity": {
+                    "type": "string",
+                    "enum": [
+                        "HOUR",
+                        "DAY"
+                    ],
+                    "title": "Granularity",
+                    "uniqueItems": true,
+                    "propertyOrder": 300
+                }
+            }
+        },
+        "query": {
+            "type": "string",
+            "title": "Metrics",
+            "format": "textarea",
+            "default": "impressions,spend",
+            "options": {
+              "input_height": "100px"
+            },
+            "description": "A comma separated list of metrics to be downloaded.",
+            "uniqueItems": true,
+            "propertyOrder": 400
+          }
+    }
+}

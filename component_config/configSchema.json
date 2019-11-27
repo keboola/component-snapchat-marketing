@@ -44,14 +44,14 @@
                     "title": "Start Date",
                     "default": "30 days ago",
                     "propertyOrder": 100,
-                    "description": "Start date, from which the extractor will download data. Can be specified as YYYY-MM-DD or in form of 30 days ago, 2 months ago, 4 hours ago, etc."
+                    "description": "Start date, from which the extractor will download data. Can be specified absolutely in format YYYY-MM-DD or relatively like 4 hours ago, 10 days ago, 3 months ago, etc."
                 },
                 "endDate": {
                     "type": "string",
                     "title": "End Date",
                     "default": "today",
                     "propertyOrder": 200,
-                    "description": "End date, to which the extractor will download data. Can be specified as YYYY-MM-DD or in form of 30 days ago, 2 months ago, 4 hours ago, etc."
+                    "description": "End date, to which the extractor will download data. Can be specified absolutely in format YYYY-MM-DD or relatively like 4 hours ago, 10 days ago, 3 months ago, etc."
                 }
             },
             "propertyOrder": 200
@@ -70,15 +70,28 @@
             "properties": {
                 "windowView": {
                     "type": "string",
-                    "title": "View Window Attribution",
-                    "enum": ["1_HOUR", "3_HOUR", "6_HOUR", "1_DAY", "7_DAY", "28_DAY"],
+                    "title": "View Window",
+                    "enum": [
+                        "1_HOUR",
+                        "3_HOUR",
+                        "6_HOUR",
+                        "1_DAY",
+                        "7_DAY",
+                        "28_DAY"
+                    ],
+                    "description": "A post-view attribution window within which conversions will be attributed to responsible ad.",
                     "default": "1_DAY",
                     "propertyOrder": 100
                 },
                 "windowSwipe": {
                     "type": "string",
-                    "title": "Swipe Up Window Attribution",
-                    "enum": ["1_DAY", "7_DAY", "28_DAY"],
+                    "title": "Swipe Up Window",
+                    "enum": [
+                        "1_DAY",
+                        "7_DAY",
+                        "28_DAY"
+                    ],
+                    "description": "A post-swipe-up attribution window within which conversions will be attributed to responsible ad.",
                     "default": "28_DAY",
                     "propertyOrder": 200
                 },
@@ -100,13 +113,13 @@
             "type": "string",
             "title": "Metrics",
             "format": "textarea",
-            "default": "impressions,spend",
+            "default": "impressions, spend",
             "options": {
-              "input_height": "100px"
+                "input_height": "100px"
             },
             "description": "A comma separated list of metrics to be downloaded. See <a href='https://developers.snapchat.com/api/docs/#measurement'>documentation</a> for a complete list of available metrics.",
             "uniqueItems": true,
-            "propertyOrder": 400
-          }
+            "propertyOrder": 150
+        }
     }
 }

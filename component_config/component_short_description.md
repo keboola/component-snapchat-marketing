@@ -1,1 +1,1 @@
-Testing functional sample extractor for purposes of the python component template. 
+Snapchat Marketing API allows to download statistics for objects ran on Snapchat, a multimedia messaging app used globally.

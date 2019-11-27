@@ -1,0 +1,2 @@
+"id","name","ad_account_id","status","objective","updated_at","created_at","start_time","end_time","lifetime_spend_cap_micro","daily_budget_micro","buy_model","regulations","measurement_spec"
+"bb38952c-8b18-4915-b0a2-aea8c24df0af","TEST_CAMPAIGN","11998ab7-5aa2-4bba-875a-70511a352a7d","PAUSED","APP_INSTALL","2019-11-25T18:43:54.838Z","2019-11-25T08:34:17.650Z","2019-11-22T09:15:31.000Z","2019-12-01T22:59:59.000Z","5000000000","","AUCTION","","{""ios_app_id"": ""463335337""}"

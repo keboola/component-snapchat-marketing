@@ -90,7 +90,7 @@ class SnapchatComponent(KBCEnvHandler):
             self.paramEndDate = _endDate
 
         _query = self.cfg_params.get(KEY_QUERY, '')
-        _queryClean = [m.strip() for m in _query.split(',') if m.strip() != '']
+        _queryClean = list(set([m.strip() for m in _query.replace('\n', ',').split(',') if m.strip() != '']))
 
         if _queryClean == []:
             self.paramQuery = ['impressions', 'spend']

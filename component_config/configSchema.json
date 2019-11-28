@@ -117,7 +117,7 @@
             "options": {
                 "input_height": "100px"
             },
-            "description": "A comma separated list of metrics to be downloaded. See <a href='https://developers.snapchat.com/api/docs/#measurement'>documentation</a> for a complete list of available metrics.",
+            "description": "A comma separated list of metrics to be downloaded. See <a href='https://developers.snapchat.com/api/docs/#measurement' target='_blank'>documentation</a> for a complete list of available metrics.",
             "uniqueItems": true,
             "propertyOrder": 150
         }

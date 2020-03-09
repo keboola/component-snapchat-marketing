@@ -60,6 +60,8 @@ class SnapchatComponent(KBCEnvHandler):
                                                           28 if self.paramGranularity == 'DAY' else 6,
                                                           strformat=DATE_CHUNK_FORMAT)
 
+        logging.debug(self.paramDateChunks)
+
     def checkParameters(self):
 
         _objects = self.cfg_params.get(KEY_DOWNLOAD_OBJECTS, [])
@@ -89,6 +91,8 @@ class SnapchatComponent(KBCEnvHandler):
             self.paramStartDate = _startDate
             self.paramEndDate = _endDate
 
+            logging.debug(f"start: {_startDate}, end: {_endDate}.")
+
         _query = self.cfg_params.get(KEY_QUERY, '')
         _queryClean = list(set([m.strip() for m in _query.replace('\n', ',').split(',') if m.strip() != '']))
 
@@ -97,6 +101,8 @@ class SnapchatComponent(KBCEnvHandler):
 
         else:
             self.paramQuery = _queryClean
+
+        logging.debug(f"Query: {self.paramQuery}.")
 
         _attribution = self.cfg_params.get(KEY_ATTRIBUTION_ATTR, {})
         _granularity = _attribution.get(KEY_ATTRIBUTION_GRANULARITY, 'DAY')
@@ -155,10 +161,10 @@ class SnapchatComponent(KBCEnvHandler):
 
         for chunk in self.paramDateChunks:
 
-            _start = tz.normalize(datetime.datetime.strptime(
-                chunk['start_date'], DATE_CHUNK_FORMAT).replace(tzinfo=pytz.utc)).replace(hour=0).isoformat()
-            _end = tz.normalize(datetime.datetime.strptime(
-                chunk['end_date'], DATE_CHUNK_FORMAT).replace(tzinfo=pytz.utc)).replace(hour=0).isoformat()
+            _start = tz.localize(datetime.datetime.strptime(chunk['start_date'],
+                                                            DATE_CHUNK_FORMAT)).replace(hour=0).isoformat()
+            _end = tz.localize(datetime.datetime.strptime(chunk['end_date'],
+                                                          DATE_CHUNK_FORMAT)).replace(hour=0).isoformat()
 
             chunks += [{'start_date': _start, 'end_date': _end}]
 
@@ -232,6 +238,8 @@ class SnapchatComponent(KBCEnvHandler):
 
             allStatObjects = []
             dates = self.normalizeTime(adAccIdSet['timezone'])
+
+            logging.debug(dates)
 
             allStatObjects += self.getAndWriteCampaigns(adAccId)
             allStatObjects += self.getAndWriteAdSquads(adAccId)

@@ -28,7 +28,7 @@ if 'KBC_LOGGER_ADDR' in os.environ and 'KBC_LOGGER_PORT' in os.environ:
     # removes the initial stdout logging
     logger.removeHandler(logger.handlers[0])
 
-APP_VERSION = '0.0.1'
+APP_VERSION = '0.1.1'
 
 if __name__ == '__main__':
 

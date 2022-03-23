@@ -4,11 +4,15 @@ import sys
 import time
 from kbc.client_base import HttpClientBase
 from urllib.parse import urlparse, parse_qs
-
+from json.decoder import JSONDecodeError
 
 BASE_URL = 'https://adsapi.snapchat.com/v1/'
 ACCESS_TOKEN_EXPIRATION = 1700
 PAGINATION_LIMIT = 500
+
+
+class SnapchatClientException(Exception):
+    pass
 
 
 class SnapchatClient(HttpClientBase):
@@ -165,7 +169,10 @@ class SnapchatClient(HttpClientBase):
         while moreRecords is True:
 
             reqPagination = eval(evalExpression, None, mappingObj)
-            scPagination, jsPagination = reqPagination.status_code, reqPagination.json()
+            try:
+                scPagination, jsPagination = reqPagination.status_code, reqPagination.json()
+            except JSONDecodeError as json_err:
+                raise SnapchatClientException(f" Failed to parse json from : {reqPagination}") from json_err
 
             if scPagination == 200:
 
@@ -255,8 +262,17 @@ class SnapchatClient(HttpClientBase):
             'view_attribution_window': windowView
         }
 
-        reqStatistics = self.get_raw(urlStatistics, params=paramsStatistics)
-        scStatistics, jsStatistics = reqStatistics.status_code, reqStatistics.json()
+        try:
+            reqStatistics = self.get_raw(urlStatistics, params=paramsStatistics)
+        except JSONDecodeError as json_error:
+            logging.error("Failed to get statistics for account")
+            raise SnapchatClientException(json_error) from JSONDecodeError
+
+        try:
+            scStatistics, jsStatistics = reqStatistics.status_code, reqStatistics.json()
+        except JSONDecodeError as json_error:
+            logging.error(f"Failed to parse statistics for account. Only got response : {reqStatistics}")
+            raise SnapchatClientException(json_error) from JSONDecodeError
 
         if scStatistics == 200:
 

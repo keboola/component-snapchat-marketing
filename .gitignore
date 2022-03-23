@@ -6,3 +6,4 @@ __pycache__/
 
 # kbc datafolder
 data/
+venv/

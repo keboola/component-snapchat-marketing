@@ -23,7 +23,7 @@ class SnapchatClient(HttpClientBase):
         self.paramClientId = clientId
         self.paramClientSecret = clientSecret
 
-        super().__init__(base_url=BASE_URL, status_forcelist=(429, 500, 502, 504))
+        super().__init__(base_url=BASE_URL, status_forcelist=(429, 500, 502, 503, 504))
         self.refreshAccessToken()
 
     def refreshAccessToken(self):

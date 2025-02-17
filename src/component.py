@@ -37,6 +37,7 @@ SUPPORTED_WINDOW_SWIPE = ["1_DAY", "7_DAY", "28_DAY"]
 
 DATE_CHUNK_FORMAT = '%Y-%m-%d'
 
+
 class SnapchatComponent(ComponentBase):
 
     def __init__(self):
@@ -264,6 +265,7 @@ class SnapchatComponent(ComponentBase):
         formatted_output = self.client.getOrganizations()
 
         return ValidationResult(formatted_output, MessageType.SUCCESS)
+
 
 """
         Main entrypoint

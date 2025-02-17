@@ -6,7 +6,8 @@ import pytz
 import sys
 from keboola.component import UserException
 from keboola.component.base import ComponentBase, sync_action
-from keboola.component.sync_actions import ValidationResult, MessageType
+from keboola.component.sync_actions import SelectElement
+from keboola.utils import split_dates_to_chunks
 from snapchat.client import SnapchatClient
 from snapchat.result import SnapchatWriter, SnapchatStatisticsWriter
 
@@ -22,6 +23,7 @@ KEY_DATES_END = 'endDate'
 KEY_ATTRIBUTION_GRANULARITY = 'granularity'
 KEY_ATTRIBUTION_SWIPE = 'windowSwipe'
 KEY_ATTRIBUTION_VIEW = 'windowView'
+KEY_SELECTED_ORGS = 'selectedOrganizations'
 
 MANDATORY_PARAMS = []
 
@@ -42,24 +44,25 @@ class SnapchatComponent(ComponentBase):
 
     def __init__(self):
         ComponentBase.__init__(self, required_parameters=MANDATORY_PARAMS)
+        self.cfg_params = self.configuration.parameters
         self.parseAuthorization()
         self.client = SnapchatClient(self.varRefreshToken, self.varAppKey, self.varAppSecret)
 
-        self.writerOrganizations = SnapchatWriter(self.data_path, 'organizations')
-        self.writerAdaccounts = SnapchatWriter(self.data_path, 'adaccounts')
-        self.writerCampaigns = SnapchatWriter(self.data_path, 'campaigns')
-        self.writerAdsquads = SnapchatWriter(self.data_path, 'adsquads')
-        self.writerCreatives = SnapchatWriter(self.data_path, 'creatives')
-        self.writerAds = SnapchatWriter(self.data_path, 'ads')
+        self.writerOrganizations = SnapchatWriter(self.data_folder_path, 'organizations')
+        self.writerAdaccounts = SnapchatWriter(self.data_folder_path, 'adaccounts')
+        self.writerCampaigns = SnapchatWriter(self.data_folder_path, 'campaigns')
+        self.writerAdsquads = SnapchatWriter(self.data_folder_path, 'adsquads')
+        self.writerCreatives = SnapchatWriter(self.data_folder_path, 'creatives')
+        self.writerAds = SnapchatWriter(self.data_folder_path, 'ads')
 
         self.checkParameters()
 
         if self.paramObjects != []:
-            self.writerStatistics = SnapchatStatisticsWriter(self.data_path, metricFields=self.paramQuery)
+            self.writerStatistics = SnapchatStatisticsWriter(self.data_folder_path, metricFields=self.paramQuery)
 
-        self.paramDateChunks = self.split_dates_to_chunks(self.paramStartDate, self.paramEndDate,
-                                                          28 if self.paramGranularity == 'DAY' else 6,
-                                                          strformat=DATE_CHUNK_FORMAT)
+        self.paramDateChunks = split_dates_to_chunks(self.paramStartDate, self.paramEndDate,
+                                                     28 if self.paramGranularity == 'DAY' else 6,
+                                                     strformat=DATE_CHUNK_FORMAT)
 
         logging.debug(self.paramDateChunks)
 
@@ -174,8 +177,14 @@ class SnapchatComponent(ComponentBase):
     def getAndWriteOrganizations(self):
 
         allOrgs = self.client.getOrganizations()
-        self.writerOrganizations.writerow(allOrgs)
-        self.varOrganizations = [org['id'] for org in allOrgs]
+
+        if self.cfg_params.get(KEY_SELECTED_ORGS):
+            selectedOrgs = [org for org in allOrgs if org['id'] in self.cfg_params.get(KEY_SELECTED_ORGS)]
+        else:
+            selectedOrgs = allOrgs
+
+        self.writerOrganizations.writerow(selectedOrgs)
+        self.varOrganizations = [org['id'] for org in selectedOrgs]
 
     def getAndWriteAdAccounts(self):
 
@@ -227,6 +236,8 @@ class SnapchatComponent(ComponentBase):
 
     def run(self):
 
+        self.query_preview()
+
         self.getAndWriteOrganizations()
         logging.info("Organizations obtained.")
 
@@ -261,10 +272,8 @@ class SnapchatComponent(ComponentBase):
 
     @sync_action("list_organizations")
     def query_preview(self):
-
-        formatted_output = self.client.getOrganizations()
-
-        return ValidationResult(formatted_output, MessageType.SUCCESS)
+        orgs = self.client.getOrganizations()
+        return [SelectElement(value=org["id"], label=f'{org["name"]} ({org["id"]})') for org in orgs]
 
 
 """

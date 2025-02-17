@@ -4,7 +4,9 @@ import json
 import logging
 import pytz
 import sys
-from kbc.env_handler import KBCEnvHandler
+from keboola.component import UserException
+from keboola.component.base import ComponentBase, sync_action
+from keboola.component.sync_actions import ValidationResult, MessageType
 from snapchat.client import SnapchatClient
 from snapchat.result import SnapchatWriter, SnapchatStatisticsWriter
 
@@ -35,12 +37,10 @@ SUPPORTED_WINDOW_SWIPE = ["1_DAY", "7_DAY", "28_DAY"]
 
 DATE_CHUNK_FORMAT = '%Y-%m-%d'
 
-
-class SnapchatComponent(KBCEnvHandler):
+class SnapchatComponent(ComponentBase):
 
     def __init__(self):
-
-        super().__init__(mandatory_params=MANDATORY_PARAMS)
+        ComponentBase.__init__(self, required_parameters=MANDATORY_PARAMS)
         self.parseAuthorization()
         self.client = SnapchatClient(self.varRefreshToken, self.varAppKey, self.varAppSecret)
 
@@ -257,3 +257,25 @@ class SnapchatComponent(KBCEnvHandler):
                     self.writerStatistics.writerow(_measures)
 
             logging.info(f"Finished download for ad account {adAccId}.")
+
+    @sync_action("list_organizations")
+    def query_preview(self):
+
+        formatted_output = self.client.getOrganizations()
+
+        return ValidationResult(formatted_output, MessageType.SUCCESS)
+
+"""
+        Main entrypoint
+"""
+if __name__ == "__main__":
+    try:
+        comp = SnapchatComponent()
+        # this triggers the run method by default and is controlled by the configuration.action parameter
+        comp.execute_action()
+    except UserException as exc:
+        logging.exception(exc)
+        exit(1)
+    except Exception as exc:
+        logging.exception(exc)
+        exit(2)

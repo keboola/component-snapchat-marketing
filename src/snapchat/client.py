@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 import time
-from kbc.client_base import HttpClientBase
+from keboola.http_client import HttpClient
 from urllib.parse import urlparse, parse_qs
 from json.decoder import JSONDecodeError
 
@@ -15,7 +15,7 @@ class SnapchatClientException(Exception):
     pass
 
 
-class SnapchatClient(HttpClientBase):
+class SnapchatClient(HttpClient):
 
     def __init__(self, refreshToken, clientId, clientSecret):
 

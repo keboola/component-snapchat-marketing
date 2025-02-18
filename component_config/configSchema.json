@@ -1,125 +1,143 @@
 {
-    "title": "Parameters",
-    "type": "object",
-    "required": [
-        "statisticsObjects",
-        "dateSettings",
-        "attributionSettings",
-        "query"
-    ],
-    "properties": {
-        "statisticsObjects": {
-            "title": "Objects to download",
-            "description": "A list of objects for which statistics will be downloaded. One or multiple objects can be specified.",
-            "type": "array",
-            "format": "select",
-            "uniqueItems": true,
-            "items": {
-                "enum": [
-                    "campaigns",
-                    "adsquads",
-                    "ads"
-                ],
-                "type": "string"
-            },
-            "default": [
-                "campaigns",
-                "adsquads",
-                "ads"
-            ],
-            "propertyOrder": 100
-        },
-        "dateSettings": {
-            "type": "object",
-            "title": "Date settings",
-            "description": "Setting date range for which the statistics will be downloaded.",
-            "format": "grid",
-            "required": [
-                "startDate",
-                "endDate"
-            ],
-            "properties": {
-                "startDate": {
-                    "type": "string",
-                    "title": "Start Date",
-                    "default": "30 days ago",
-                    "propertyOrder": 100,
-                    "description": "Start date, from which the extractor will download data. Can be specified absolutely in format YYYY-MM-DD or relatively like 4 hours ago, 10 days ago, 3 months ago, etc."
-                },
-                "endDate": {
-                    "type": "string",
-                    "title": "End Date",
-                    "default": "today",
-                    "propertyOrder": 200,
-                    "description": "End date, to which the extractor will download data. Can be specified absolutely in format YYYY-MM-DD or relatively like 4 hours ago, 10 days ago, 3 months ago, etc."
-                }
-            },
-            "propertyOrder": 200
-        },
-        "attributionSettings": {
-            "type": "object",
-            "title": "Result settings",
-            "description": "Snapchat API result settings.",
-            "format": "grid",
-            "required": [
-                "windowSwipe",
-                "windowView",
-                "granularity"
-            ],
-            "propertyOrder": 300,
-            "properties": {
-                "windowView": {
-                    "type": "string",
-                    "title": "View Window",
-                    "enum": [
-                        "1_HOUR",
-                        "3_HOUR",
-                        "6_HOUR",
-                        "1_DAY",
-                        "7_DAY",
-                        "28_DAY"
-                    ],
-                    "description": "A post-view attribution window within which conversions will be attributed to responsible ad.",
-                    "default": "1_DAY",
-                    "propertyOrder": 100
-                },
-                "windowSwipe": {
-                    "type": "string",
-                    "title": "Swipe Up Window",
-                    "enum": [
-                        "1_DAY",
-                        "7_DAY",
-                        "28_DAY"
-                    ],
-                    "description": "A post-swipe-up attribution window within which conversions will be attributed to responsible ad.",
-                    "default": "28_DAY",
-                    "propertyOrder": 200
-                },
-                "granularity": {
-                    "type": "string",
-                    "enum": [
-                        "HOUR",
-                        "DAY"
-                    ],
-                    "default": "DAY",
-                    "title": "Granularity",
-                    "description": "Select if the statistics should be downloaded on daily or hourly basis.",
-                    "uniqueItems": true,
-                    "propertyOrder": 300
-                }
-            }
-        },
-        "query": {
-            "type": "string",
-            "title": "Metrics",
-            "format": "textarea",
-            "default": "impressions, spend",
-            "options": {
-                "input_height": "100px"
-            },
-            "description": "A comma separated list of metrics to be downloaded. See <a href='https://developers.snapchat.com/api/docs/#measurement' target='_blank'>documentation</a> for a complete list of available metrics.",
-            "uniqueItems": true,
-            "propertyOrder": 150
+  "title": "Parameters",
+  "type": "object",
+  "required": [
+    "statisticsObjects",
+    "dateSettings",
+    "attributionSettings",
+    "query"
+  ],
+  "properties": {
+    "organizations_array": {
+      "title": "Organization IDs",
+      "type": "array",
+      "propertyOrder": 10,
+      "description": "Organisations to include in export; if empty, all are downloaded.",
+      "items": {
+        "enum": [],
+        "type": "string"
+      },
+      "format": "select",
+      "options": {
+        "async": {
+          "label": "Load organizations",
+          "action": "list_organizations"
         }
+      },
+      "uniqueItems": true
+    },
+    "statisticsObjects": {
+      "title": "Objects to download",
+      "description": "A list of objects for which statistics will be downloaded. One or multiple objects can be specified.",
+      "type": "array",
+      "format": "select",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "campaigns",
+          "adsquads",
+          "ads"
+        ],
+        "type": "string"
+      },
+      "default": [
+        "campaigns",
+        "adsquads",
+        "ads"
+      ],
+      "propertyOrder": 100
+    },
+    "dateSettings": {
+      "type": "object",
+      "title": "Date settings",
+      "description": "Setting date range for which the statistics will be downloaded.",
+      "format": "grid",
+      "required": [
+        "startDate",
+        "endDate"
+      ],
+      "properties": {
+        "startDate": {
+          "type": "string",
+          "title": "Start Date",
+          "default": "30 days ago",
+          "propertyOrder": 100,
+          "description": "Start date, from which the extractor will download data. Can be specified absolutely in format YYYY-MM-DD or relatively like 4 hours ago, 10 days ago, 3 months ago, etc."
+        },
+        "endDate": {
+          "type": "string",
+          "title": "End Date",
+          "default": "today",
+          "propertyOrder": 200,
+          "description": "End date, to which the extractor will download data. Can be specified absolutely in format YYYY-MM-DD or relatively like 4 hours ago, 10 days ago, 3 months ago, etc."
+        }
+      },
+      "propertyOrder": 200
+    },
+    "attributionSettings": {
+      "type": "object",
+      "title": "Result settings",
+      "description": "Snapchat API result settings.",
+      "format": "grid",
+      "required": [
+        "windowSwipe",
+        "windowView",
+        "granularity"
+      ],
+      "propertyOrder": 300,
+      "properties": {
+        "windowView": {
+          "type": "string",
+          "title": "View Window",
+          "enum": [
+            "1_HOUR",
+            "3_HOUR",
+            "6_HOUR",
+            "1_DAY",
+            "7_DAY",
+            "28_DAY"
+          ],
+          "description": "A post-view attribution window within which conversions will be attributed to responsible ad.",
+          "default": "1_DAY",
+          "propertyOrder": 100
+        },
+        "windowSwipe": {
+          "type": "string",
+          "title": "Swipe Up Window",
+          "enum": [
+            "1_DAY",
+            "7_DAY",
+            "28_DAY"
+          ],
+          "description": "A post-swipe-up attribution window within which conversions will be attributed to responsible ad.",
+          "default": "28_DAY",
+          "propertyOrder": 200
+        },
+        "granularity": {
+          "type": "string",
+          "enum": [
+            "HOUR",
+            "DAY"
+          ],
+          "default": "DAY",
+          "title": "Granularity",
+          "description": "Select if the statistics should be downloaded on daily or hourly basis.",
+          "uniqueItems": true,
+          "propertyOrder": 300
+        }
+      }
+    },
+    "query": {
+      "type": "string",
+      "title": "Metrics",
+      "format": "textarea",
+      "default": "impressions, spend",
+      "options": {
+        "input_height": "100px"
+      },
+      "description": "A comma separated list of metrics to be downloaded. See <a href='https://developers.snapchat.com/api/docs/#measurement' target='_blank'>documentation</a> for a complete list of available metrics.",
+      "uniqueItems": true,
+      "propertyOrder": 150
     }
+  }
 }

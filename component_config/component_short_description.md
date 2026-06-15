@@ -1,1 +1,1 @@
-Snapchat Marketing API allows to download statistics for objects ran on Snapchat, a multimedia messaging app used globally.
+Extracts campaign, ad squad, and ad statistics from the Snapchat Marketing API.
